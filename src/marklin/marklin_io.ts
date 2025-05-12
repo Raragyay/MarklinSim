@@ -33,6 +33,7 @@ export class MarklinIO {
     public setController(controller: MarklinController) {
         this.controller = controller;
         this.controller.setSensorReportCallback((sensors: boolean[]) => this.reportSensor(sensors));
+        this.decoder.setController(controller);
     }
 
     public reportSensor(sensors: boolean[]) {
@@ -55,7 +56,7 @@ export class MarklinIO {
 
     private onData(data: Buffer): void {
         for (const ch of data) {
-            this.decoder.decode(this.controller, ch);
+            this.decoder.enqueue(ch);
         }
     }
 }

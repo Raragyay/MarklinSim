@@ -34,6 +34,8 @@ export class Train {
         globalPosition: null
     };
     public positionDirty: boolean = false;
+    public triggered_sensors_mask: boolean[] = new Array(config.NUM_SENSORS).fill(false);
+    public triggered_sensors: Sensor[] = [];
 
     public constructor(id: number) {
         this.id = id;
@@ -111,6 +113,14 @@ export class Train {
             }
 
             this.positionDirty = true;
+
+            const sensors = this.frontWheel.track.getSensorsAt(this.frontWheel.distance, this.frontWheel.forward);
+            for (const sensor of sensors) {
+                if (!this.triggered_sensors_mask[sensor.id]) {
+                    this.triggered_sensors_mask[sensor.id] = true;
+                    this.triggered_sensors.push(sensor);
+                }
+            }
         }
     }
 
@@ -140,7 +150,10 @@ export class Train {
     }
 
     public getTriggeredSensors(): Sensor[] {
-        return this.frontWheel.track.getSensorsAt(this.frontWheel.distance, this.frontWheel.forward);
+        this.triggered_sensors_mask.fill(false);
+        const ret = [...this.triggered_sensors];
+        this.triggered_sensors = [];
+        return ret;
     }
 }
 

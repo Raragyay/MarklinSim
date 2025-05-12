@@ -58,16 +58,21 @@ export class MarklinController {
         train.reverse();
     }
 
-    public changeSwitchDirection(id: number, direction: SwitchDirection) {
+    public changeSwitchDirection(id: number, direction: SwitchDirection): number {
         if (!this.switches.has(id)) {
             console.warn(`Setting train speed for train out of track: ${id}.`);
             return;
         }
         const swytch = this.switches.get(id);
-        swytch.changeDirection(direction);
+
+        // I think it happens at the end
+        setTimeout(() => {
+            swytch.changeDirection(direction);
+        }, 160);
+        return Date.now() + 160;
     }
 
-    public requestSensorReporting() {
+    public requestSensorReporting(): number {
         if (this.sensorQuantity < 0) {
             for (const track of this.tracks.values()) {
                 for (const sensor of track.getSensors()) {
@@ -89,9 +94,12 @@ export class MarklinController {
             }
         }
 
+        const now = Date.now()
         setTimeout(() => {
+            console.warn("responding", now + 300)
             this.reportSensor(triggered);
-        }, config.SENSOR_REPORT_DELAY_MS);
+        }, 300);
+        return Date.now() + 61;
     }
 
     public tick(interval: number) {

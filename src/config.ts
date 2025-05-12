@@ -19,7 +19,8 @@ export const TRACK_WIDTH: number = 2;
 export const TURNOUT_PORTION: number = 0.5;
 
 export const SENSOR_TRIGGER_WIDTH: number = 6;
-export const SENSOR_REPORT_DELAY_MS: number = 100;
+export const SENSOR_REPORT_DELAY_MS: number = 61;
+export const NUM_SENSORS: number = 80;
 
 export const MONOSPACE_FONTS: string[] = [
     'Consolas',
